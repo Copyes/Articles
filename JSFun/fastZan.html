@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <%- include('../../../unit/layout/header.html')%>
+    <title>无限点赞</title>
+    <style type="text/css">
+        #btn {
+            position: absolute;
+            top: 500px;
+            left: 300px;
+            width: 50px;
+            height: 50px;
+            background-color: black;
+        }
+
+        .box {
+            position: absolute;
+            z-index: 990;
+            top: -50px;
+            right: 0;
+            width: 50px;
+            height: 50px;
+            -webkit-animation: boxFade 1s linear;
+            animation: boxFade 1s linear;
+            border-radius: 50%;
+        }
+
+        @-webkit-keyframes boxFade {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: .8;
+            }
+        }
+
+        @keyframes boxFade {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: .8;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="btn"></div>
+    <script type="text/javascript">
+    var btn  = document.getElementById('btn');
+    var timeDefault = 1.00,id;
+    // requestAnimationFrame的兼容性写法
+    window.requestAnimFrame = (function(){
+      return  window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame    ||
+        window.oRequestAnimationFrame      ||
+        window.msRequestAnimationFrame     ||
+        function( callback ){
+        window.setTimeout(callback, 1000 / 60);
+      };
+    })();
+
+    window.cancelAnimationFrame = (function () {
+        return window.cancelAnimationFrame ||
+                window.webkitCancelAnimationFrame ||
+                window.mozCancelAnimationFrame ||
+                window.oCancelAnimationFrame ||
+                function (timer) {
+                    window.clearTimeout(timer);
+                };
+    })();
+
+    //生成盒子对象就是点赞飘的图
+    function Box(){
+        var images = ['http://b0.hucdn.com/party/2016/8/upload_e5671c0edaa64c03a26c607c0765c68a_52x52.png',
+                        'http://b0.hucdn.com/party/2016/8/upload_6acdf5202992d9cf4efa87c8a89898fc_52x52.png',
+                        'http://b0.hucdn.com/party/2016/8/upload_fa3e4935cbf5c8156aa3a14afcc26f43_52x52.png',
+                        'http://b0.hucdn.com/party/2016/8/upload_e9f761735f1d8b9c152d1b64bfc9418b_52x52.png',
+                        'http://b0.hucdn.com/party/2016/8/upload_30b37ac1bfc01134b3acd0196c9ef631_52x52.png'];
+        
+        //生成一个图片
+        this.box = document.createElement('img');
+        this.box.className = 'box';
+        this.box.src = images[Math.floor(Math.random()*images.length)];
+
+        //计算速度
+        this.time = +Date.now();
+        this.boxX = 0;
+        this.boundnum = 0;
+
+        //随机生成X轴速度
+        var randomNum = Math.random()*10;
+        //随机生成的方向，不够随机
+        randomNum > 5 ? this.dirX = -1 : this.dirX = 1;
+        //随机碰撞边界
+        var boundryArr = [20,25,30,35];
+        this.boundVal = boundryArr[Math.floor(Math.random()*boundryArr.length)];
+        console.log(this.boundVal);
+        btn.appendChild(this.box);
+        //将生成点赞气泡存起来，以便销毁；
+        Box.instance.push(this)
+    }
+    //点赞图片移动
+    Box.prototype.move = function(){
+        var me = this;
+        var t = (+Date.now() - this.time) / 1000
+        //运行1.秒销毁
+        if(t > timeDefault){
+            return this.destory()
+        }
+        //y轴坐标计算
+        var y = - 60 * t * t - 110 * t;      
+        //X轴坐标计算
+        this.boxX = this.boxX - this.dirX;
+        //碰撞反向
+        if(this.boxX < -(this.boundVal) || this.boxX > 20){
+            this.dirX = -this.dirX;
+        }
+        //物体运动的轨迹(每一帧的坐标)
+        this.box.style.transform = 'translate3d(' + this.boxX + 'px, ' + y + 'px,'+ 0 +')';
+        this.box.style.webkitTransform  = 'translate3d(' + this.boxX + 'px, ' + y + 'px,'+ 0 +')';
+    }
+    //不用的了我们就销毁了吧。
+    Box.prototype.destory = function(){
+        var index = -1
+        //找药删除的。
+        for(var i = 0; i < Box.instance.length; i++){
+            if(this === Box.instance[i]){
+                index = i
+                break
+            }
+        }
+        //来来来 ，删了删了。
+        if(index !== -1){
+            Box.instance.splice(index, 1)
+            this.box.parentNode.removeChild(this.box);  
+        }
+        //没有图片运动的时候，就关了吧
+        if(Box.instance.length == 0){
+            cancelAnimationFrame(id);
+        }
+
+    }
+    Box.instance = [];
+
+    function run(){
+        Box.instance.forEach(function(v){
+            v.move()
+        })
+        //来来来动起来；
+        id = requestAnimFrame(run)
+    }
+    run();
+
+    btn.addEventListener('click',function(){
+        new Box();
+    });
+    </script>
+</body>
+</html>
