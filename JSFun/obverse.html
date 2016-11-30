@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>监听一个对象的变化</title>
+</head>
+<body>
+	
+</body>
+<script type="text/javascript">
+	//观察者构造函数
+	function Observer(data){
+		this.data = data;
+		this.deep(data);
+	}
+	//遍历对象的每一个属性，以便监听每一个属性的变化。
+	Observer.prototype.deep = function(obj){
+		let val;
+		for(let key in obj){
+			if(obj.hasOwnProperty(key)){
+				val = obj[key];
+				if(typeof val == 'object'){
+					new Observer(val);
+				}
+
+				this.convert(key,val);
+			}
+		}
+	}
+	//就是访问并设置你监听的属性。
+	Observer.prototype.convert = function(key,val){
+		Object.defineProperty(this.data,key,{
+			enumerable : true,
+			configurable : true,
+			get :  function(){
+				console.log('你访问了' + key + '属性');
+				return val;
+			},
+			set : function(newVal){
+				console.log('你设置了' + key + '属性');
+				console.log('新的属性值为' + key + '=' + newVal);
+				if(newVal === val){
+					return;
+				}
+				val = newVal;
+			}
+		})
+	}
+
+	let data = {
+	    user: {
+	        name: "fanchao",
+	        age: "24"
+	    },
+	    address: {
+	        city: "hangzhou"
+	    }
+	};
+	let app = new Observer(data);
+</script>
+</html>
