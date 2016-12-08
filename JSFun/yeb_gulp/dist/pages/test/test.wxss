@@ -1,0 +1,8 @@
+.test {
+  background-color: red;
+}
+.test .test-gulp {
+  color: ssssssssssasdfasdfasdf sssssss;
+}
+
+/*# sourceMappingURL=data:application/json;charset=utf8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInBhZ2VzL3Rlc3QvdGVzdC5sZXNzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0MscUJBQUE7O0FBREQsS0FFQztFQUNDLHFDQUFBIiwic291cmNlc0NvbnRlbnQiOlsiLnRlc3Qge1xuXHRiYWNrZ3JvdW5kLWNvbG9yOiByZWQ7XG5cdC50ZXN0LWd1bHAge1xuXHRcdGNvbG9yOiBzc3Nzc3Nzc3NzYXNkZmFzZGZhc2RmIHNzc3Nzc3M7XG5cdH1cbn0iXSwiZmlsZSI6InBhZ2VzL3Rlc3QvdGVzdC5jc3MifQ== */
