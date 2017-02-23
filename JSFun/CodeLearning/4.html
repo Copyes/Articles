@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>vue数据单向绑定</title>
+</head>
+
+<body>
+    <div id="app">
+        <input type="text" v-model="msg">
+        <p>{{ msg }}</p>
+        <ul>
+            <li>1</li>
+            <li>{{msg}}</li>
+            <li>{{test}}</li>
+        </ul>
+    </div>
+</body>
+<script type="text/javascript">
+	// 判断每个节点是不是有子节点，如果有那么就返回
+	const isChild = (node) => {
+		return !node.childNodes.length ? false : node;
+	}
+
+	// 用文档片段来劫持dom结构，进行dom解析完后重新渲染
+	const nodeToFrgment = (node, vm) => {
+		let frag = document.createDocumentFragment();
+		
+		let child;
+		// 遍历所有的子节点？？？
+		while (child = node.firstChild){
+			// 解析下数据了
+			compile(child, vm);
+
+			if(isChild(child)){
+				console.log(child);
+				nodeToFrgment(child, vm);
+			}
+
+			frag.appendChild(child);
+		}
+
+		node.appendChild(frag);
+	}
+	// 初始化绑定数据
+	const compile = (node, vm) => {
+		// node为元素节点的时候
+		if(node.nodeType === 1){
+			// 获取处元素节点上所有属性主要是为了获得v-model		
+			var attr = node.attributes;
+
+			for(let i = 0; i < attr.length; ++i){
+				if(attr[i].nodeName === 'v-model'){
+					
+					var name = attr[i].nodeValue;
+					node.value = vm.data[name];
+					node.removeAttribute(attr[i].nodeName);
+				}
+			}
+		}
+		// 文本节点
+		if(node.nodeType === 3){
+			let reg = /\{\{(.*)\}\}/;
+			if(reg.test(node.nodeValue)){
+				// 这个就是为了去除表达式两边的空格
+				var name = RegExp.$1.trim();
+				node.nodeValue = vm.data[name];
+			}
+		}
+	}
+
+	function Vue(options){
+		this.id = options.el;
+		this.data = options.data;
+
+		nodeToFrgment(document.getElementById(this.id), this);
+	}
+
+	let vm = new Vue({
+		el: 'app',
+		data: {
+			msg: '单向绑定的模式',
+			test: '测试键'
+		}
+	});
+</script>
+</html>
