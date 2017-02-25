@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>数据双向绑定</title>
+</head>
+<body>
+	<div id="app">
+        <input type="text" v-model="msg">
+        <p>{{ msg }}</p>
+        <ul>
+            <li>1</li>
+            <li>{{msg}}</li>
+            <li>{{test}}</li>
+        </ul>
+    </div>
+</body>
+<script>
+	// 判断每个节点是不是有子节点，如果有那么就返回
+	const isChild = (node) => {
+		return !node.childNodes.length ? false : node;
+	}
+
+	// 用文档片段来劫持dom结构，进行dom解析完后重新渲染
+	const nodeToFrgment = (node, vm) => {
+		let frag = document.createDocumentFragment();
+		
+		let child;
+		// 遍历所有的子节点
+		while (child = node.firstChild){
+			// 解析下数据了
+			compile(child, vm);
+
+			if(isChild(child)){
+				nodeToFrgment(child, vm);
+			}
+
+			frag.appendChild(child);
+		}
+
+		node.appendChild(frag);
+	}
+	// 初始化绑定数据
+	const compile = (node, vm) => {
+		console.log(node);
+		// node为元素节点的时候
+		if(node.nodeType === 1){
+			// 获取处元素节点上所有属性主要是为了获得v-model		
+			var attrs = node.attributes;
+
+			for(let i = 0; i < attrs.length; ++i){
+				if(attrs[i].nodeName === 'v-model'){
+					
+					var name = attrs[i].nodeValue;
+					if(node.nodeName === 'INPUT'){
+						node.addEventListener('keyup', (e) => {
+							vm[name] = e.target.value;
+							console.log(vm[name]);
+							console.log(vm);
+						});
+					}
+
+					node.value = vm[name];
+					node.removeAttribute(attrs[i].nodeName);
+				}
+			}
+		}
+		// 文本节点
+		if(node.nodeType === 3){
+			console.log(node.nodeValue);
+			let reg = /\{\{(.*)\}\}/;
+			if(reg.test(node.nodeValue)){
+				// 这个就是为了去除表达式两边的空格
+				var name = RegExp.$1.trim();
+				//node.nodeValue = vm.data[name];
+
+				new Watcher(vm, node, name);
+			}
+		}
+	}
+
+	// 订阅者（为每个节点的数据建立watcher 队列，每次接受更改数据需求哈后，利用数据劫持执行对应的节点的数据更新操作）
+	function Watcher(vm, node, name){
+		Dep.target = this;
+		this.vm = vm;
+		this.node = node;
+		this.name = name;
+
+		this.update();
+
+		Dep.target = null;
+	}
+
+	Watcher.prototype = {
+		update(){
+			this.get();
+			if(this.node.nodeName === 'INPUT'){
+				this.node.value = this.value;
+			}else{
+				this.node.nodeValue = this.value;
+			}	
+		},
+		get(){
+			this.value = this.vm[this.name];
+		}
+	}
+
+	function Dep(){
+		this.subs = [];
+	}
+
+	Dep.prototype = {
+		addSub(watcher){
+			this.subs.push(watcher);
+		},
+		notify(){
+			this.subs.forEach((watcher) => {
+				watcher.update();
+			});
+		}
+	}
+
+
+	// 监听者（利用setter监听view => model 的数据变化  发出通知更改model数据后再从model＝> view更新视图所有用到的地方）
+	const observer = (data, vm) => {
+		// 遍历劫持data下面的所有的属性
+		Object.keys(data).forEach((key) => {
+			defineReactive(vm, key, data[key]);
+		});
+	}
+	// 属性劫持封装
+	const defineReactive = (vm, key, val) => {
+		// 新建通知者
+		var dep = new Dep();
+		// 利用setter 和 getter 访问器来对属性的值监听
+		Object.defineProperty(vm, key, {
+			get: () => {
+				console.log('被访问了');
+				if(Dep.target){
+					console.log(val);
+					dep.addSub(Dep.target);
+				}
+				return val;
+			},
+			set: (newVal) => {
+				console.log('被设置了');
+				if(val === newVal){
+					return;
+				}
+				val = newVal;
+				vm.data[key] = val;
+				dep.notify();
+			}
+		});
+	}
+
+	function Vue(options){
+		this.id = options.el;
+		this.data = options.data;
+		observer(this.data, this);
+		nodeToFrgment(document.getElementById(this.id), this);
+	}
+
+	let vm = new Vue({
+		el: 'app',
+		data: {
+			msg: '单向绑定的模式',
+			test: '测试键'
+		}
+	});
+</script>
+</html>
