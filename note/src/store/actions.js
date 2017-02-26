@@ -11,3 +11,7 @@ export const eventDone = ({ commit }, param) => {
 export const eventCancel = ({ commit }, param) => {
 	commit('EVENTCANCEL', {id: param});
 }
+// 清空事件
+export const clearEvent = ({ commit}) => {
+	commit('CLEAREVENT');
+}

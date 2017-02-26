@@ -38,13 +38,17 @@
                 </li>
             </ul>
         </div>
+        <n-tools :is-show="tools" @cleardialog="clearData" @opentable="table = true; tools = false"></n-tools>
     </section>
+    <n-dialog :is-show="dialog" :msg="tips" @cancel="dialog=false" @sure="sureDialog"></n-dialog>
   </div>
 </template>
 
 <script type="text/babel">
 import nHeader from './components/Header.vue';
 import nTools from './components/Tools.vue';
+import nDialog from './components/Dialog.vue';
+
 import addForm from './components/Add.vue';
 export default {
   name: 'app',
@@ -65,7 +69,10 @@ export default {
             }
         ],
         tools: false,
-        showTable: false
+        dialog: false,
+        tips: '',
+        showTable: false,
+        dialog_type: ''
     }
   },
   computed: {
@@ -95,6 +102,25 @@ export default {
     }
   },
   methods: {
+    // 确定要删除的按钮
+    sureDialog(){
+        switch(this.dialog_type){
+            case 'clear':
+                this.$store.dispatch('clearEvent');
+                break;
+            // case 'del':
+            //     this.$store.dispatch('delEvent');
+            //     break; 
+        }
+
+        this.dialog = false;
+    },
+    // 展示提示框
+    clearData(){
+        this.dialog = true;
+        this.dialog_type = 'clear';
+        this.tips = '清空数据后无法恢复，确认是不是要删除？';
+    },
     // 移动到已取消去
     moveToCancel(id, event){
         this.$store.dispatch('eventCancel', id);
@@ -151,6 +177,8 @@ export default {
   },
   components: {
       nHeader,
+      nTools,
+      nDialog,
       addForm
   }
 }

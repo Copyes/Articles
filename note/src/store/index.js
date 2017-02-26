@@ -66,6 +66,10 @@ const mutations = {
 		}
 		states.events.unshift(item);
 		local.set(states);
+	},
+	CLEAREVENT(states, obj){
+		states.events = [];
+		local.clear();
 	}
 
 };
