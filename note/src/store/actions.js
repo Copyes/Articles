@@ -15,3 +15,4 @@ export const eventCancel = ({ commit }, param) => {
 export const clearEvent = ({ commit}) => {
 	commit('CLEAREVENT');
 }
+

@@ -3,9 +3,12 @@
 import Vue from 'vue'
 import App from './App'
 import Vuex from 'vuex'
-import store from './store/index'
+import config from './store/index'
 
 Vue.use(Vuex);
+
+var store = new Vuex.Store(config);
+//Vue.use(Vuex);
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

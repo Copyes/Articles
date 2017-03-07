@@ -1,8 +1,11 @@
 <template>
   <div id="app">
+    
     <n-header @tools="changePages"></n-header>
+    
     <section class="container">
         <add-form></add-form>
+
         <div class="event-content">
             <div class="event-tab" @click="changeCollapse(0, $event)">
                 未完成
@@ -38,8 +41,10 @@
                 </li>
             </ul>
         </div>
+        
         <n-tools :is-show="tools" @cleardialog="clearData" @opentable="table = true; tools = false"></n-tools>
     </section>
+    
     <n-dialog :is-show="dialog" :msg="tips" @cancel="dialog=false" @sure="sureDialog"></n-dialog>
   </div>
 </template>
@@ -78,6 +83,7 @@ export default {
   computed: {
     // 获取待办事情
     getTodoEvents(){
+        console.log(this.$store);
         return this.$store.state.events.filter((item) =>{
             if(item.type === 1){
                 return item;

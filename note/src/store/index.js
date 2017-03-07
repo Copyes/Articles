@@ -1,9 +1,5 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
 
 import * as actions from './actions.js';
-Vue.use(Vuex);
-
 // 获取今天的日期
 const getDate = () => {
 	const date = new Date();
@@ -74,9 +70,8 @@ const mutations = {
 
 };
 
-
-export default new Vuex.Store({
-    state,
+export default {
+	state,
     actions,
     mutations
-})
+}
