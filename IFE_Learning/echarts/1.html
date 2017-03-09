@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>echarts学习</title>
+	<script src="./echarts.js"></script>
+</head>
+<body>
+	<div id="main" style="width: 600px;height: 400px;"></div>
+</body>
+<script type="text/javascript">
+	var oMain = document.getElementById('main');
+
+	var myEcharts = echarts.init(oMain);
+
+
+	var options = {
+		title: {
+			text: 'XX裁员人员分布'
+		},
+		tooltip: {},
+		legend: {
+			data:['人数']
+		},
+		xAxis: {
+			data: ['前端','产品','运营','测试','后端','安卓','iOS']
+		},
+		yAxis: {},
+		series: [{
+			name: '人数',
+			type: 'bar',
+			data: [10,5,100,10,10,5,5]
+		}]
+	}
+
+	myEcharts.setOption(options);
+</script>
+</html>
