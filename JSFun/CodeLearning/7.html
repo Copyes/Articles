@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>flexbox学习笔记</title>
+	<style>
+		.container {
+			width: 400px;
+			height: 400px;
+			display: flex;
+			align-items: flex-start;
+			background-color: #f2f2f2;
+		}
+		.box {
+			width: 100px;
+			height: 100px;
+			color: #fff;
+		}
+		.box1 {
+			background-color: #ff4965;
+		}
+		.box2 {
+			height: 80px;
+			background-color: #443234;
+		}
+		.box3 {
+			background-color: blue;
+		}
+		.box4 {
+			width: 120px;
+			background-color: green;
+		}
+		.self {
+			align-self: center;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="box box1"><p>ssss</p></div>
+		<div class="box box2 self">asdfasdf</div>
+		<div class="box box3">asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdf</div>
+		<div class="box box4">asdfasdfasdfsaf</div>
+	</div>
+	</body>
+</html>
