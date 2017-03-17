@@ -225,6 +225,7 @@ export default {
         max-width:800px;
         margin:auto;
         box-sizing: border-box;
+        background-color: #fff;
         &.hide{
             display: none;
         }

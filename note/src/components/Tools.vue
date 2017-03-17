@@ -31,7 +31,10 @@
             openTable(){
                 this.$emit('opentable');
             }
-        }
+        },
+        stores: {
+            bottomTxt: 'state.global.txt'
+          }
     }
 </script>
 <style lang="less">

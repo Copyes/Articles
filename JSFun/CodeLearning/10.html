@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>flexbox理解2</title>
+	<style>
+		.container {
+			display: flex;
+			flex-direction: row;
+			width: 660px;
+			height: 600px;
+			background-color: black;
+		}
+		.box {
+			margin-right: 10px;
+			height: 100px;
+		}
+		.box1 {
+			flex: 1 2 300px;
+			background-color: red;
+		}
+		.box2 {
+			flex: 2 1 300px;
+			background-color: blue;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="box box1"></div>
+		<div class="box box2"></div>
+	</div>
+</body>
+</html>
