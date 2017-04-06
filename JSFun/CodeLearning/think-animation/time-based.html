@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>基于时间差的动画算法理解</title>
+	<style>
+		.div {
+		    width: 30px;
+		    height: 20px;
+		    position: relative;
+		}
+
+		.green {
+		    background-color: green;
+		}
+
+		.red {
+		    background-color: red;
+		}
+
+		.blue {
+		    background-color: blue;
+		}
+	</style>
+</head>
+<body>
+	<div class="title">60 fps:</div>
+	<div class="div green" id="div1"></div>
+
+	<div class="title">30 fps:</div>
+	<div class="div red" id="div2"></div>
+
+	<div class="title">10 fps:</div>
+	<div class="div blue" id="div3"></div>
+</body>
+<script>
+	function moveDivTimeBased(oDiv, fps){
+		var left = 0;
+		var param = 1;
+
+		var curTime = +new Date();
+		var preTime = +new Date();
+
+		function loop(){
+			var curTime = +new Date();
+			var dt = curTime - preTime;
+			preTime = curTime;
+			updateDirection(dt);
+			draw();
+		}
+
+		function updateDirection(dt){
+			left += param * (dt * 0.12);
+			if (left > 300) {
+	            left = 300;
+	            param = -1;
+	        } else if (left < 0) {
+	            left = 0;
+	            param = 1;
+	        }
+		}
+
+		function draw(){
+			oDiv.style.left = left + 'px';
+		}
+
+
+		setInterval(loop, 1000 / fps);
+	}
+
+	moveDivTimeBased(document.getElementById('div1'), 60);
+	moveDivTimeBased(document.getElementById('div2'), 30);
+	moveDivTimeBased(document.getElementById('div3'), 10);
+</script>
+</html>
