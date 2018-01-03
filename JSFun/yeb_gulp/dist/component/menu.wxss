@@ -1,8 +1,0 @@
-body {
-  color: #fff;
-}
-body span {
-  color: #ssssss;
-}
-
-/*# sourceMappingURL=data:application/json;charset=utf8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNvbXBvbmVudC9tZW51Lmxlc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDQyxXQUFBOztBQURELElBRUM7RUFDQyxjQUFBIiwic291cmNlc0NvbnRlbnQiOlsiYm9keSB7XG5cdGNvbG9yOiAjZmZmO1xuXHRzcGFuIHtcblx0XHRjb2xvcjogI3Nzc3Nzcztcblx0fVxufSJdLCJmaWxlIjoiY29tcG9uZW50L21lbnUuY3NzIn0= */
