@@ -1,2 +1,5 @@
-# New
-新的开始
+## Blog
+
+A blog for learning knowledge
+
+## Articles
