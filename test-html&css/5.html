@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>css实现垂直居中</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .container {
+      width: 100%;
+      height: 100%;
+    }
+
+    .vertical {
+      width: 100px;
+      height: 100px;
+      background: red;
+      margin: 0 auto;
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+      /* 将元素沿 Y 轴方向移动自身的 50% */
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="vertical">
+
+    </div>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>用 Flex 画出一个直径 100px 的圆，并放在屏幕中间</title>
+  <style>
+    html {
+      width: 100%;
+      height: 100%;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    .circle {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: red;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="circle"></div>
+</body>
+
+</html>
