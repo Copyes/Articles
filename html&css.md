@@ -213,3 +213,79 @@ px 根据不同人理解是不同的。比如说设计师理解的 px 是设备�
 * 每英寸像素：ppi，表示每英寸所拥有的像素(pixel)数目，数值越高，代表显示屏能够以越高的密度显示图像
 * 设备像素比：根据计算出的 ppi 和基本密度分界，获得默认缩放比例，即设备像素比。（先规定密度分界基数为 160，然后设备像素比=ppi 除以密度分界基数 160）
   ![密度分界](https://upload-images.jianshu.io/upload_images/8133-ef1f05dc254add2e.jpg)
+
+> 移动端布局方案
+
+由于移动端的屏幕尺寸的比例不固定，所以布局的时候大多采用的是流式布局。移动端布局需要注意下面几点：
+
+* 指定好相关的 viewport
+  * `width`: 设置 `viewport` 的宽度（即之前所提及到的，浏览器的宽度详），这里可以为一个整数，又或者是字符串"width-device"
+  * `initial-scale`: 页面初始的缩放值，为数字，可以是小数
+  * `minimum-scale`: 允许用户的最小缩放值，为数字，可以是小数
+  * `maximum-scale`: 允许用户的最大缩放值，为数字，可以是小数
+  * `height`: 设置`viewport`得高度（一般不设置）
+  * `user-scalable`: 是否允许用户进行缩放，'no' 为不允许，'yes' 为允许
+
+```html
+<script type="text/javascript">
+  ! function(a) {
+    function b() {
+        a.rem = f.getBoundingClientRect().width / 16, f.style.fontSize = a.rem + "px"
+    }
+    var c, d = a.navigator.appVersion.match(/iphone/gi) ? a.devicePixelRatio : 1,
+        e = 1 / d,
+        f = document.documentElement,
+        g = document.createElement("meta");
+    if (a.dpr = d, a.addEventListener("resize", function() {
+            clearTimeout(c), c = setTimeout(b, 300)
+        }, !1), a.addEventListener("pageshow", function(a) {
+            a.persisted && (clearTimeout(c), c = setTimeout(b, 300))
+        }, !1), f.setAttribute("data-dpr", d), g.setAttribute("name", "viewport"), g.setAttribute("content", "initial-scale=" + e + ", maximum-scale=" + e + ", minimum-scale=" + e + ", user-scalable=no"), f.firstElementChild) {
+          f.firstElementChild.appendChild(g);
+    } else {
+      var h = document.createElement("div");
+      h.appendChild(g), document.write(h.innerHTML)
+    }
+    b();
+}(window);
+```
+
+以上代码是动态计算 viewport 的。根据不通的 dpr 计算出不通的 rem。目前已经应用在线上项目了。
+
+* 利用好 rem
+  经过上面的代码后，设计稿就按照 750px 来设计了。写的时候就按照尺寸／rem 就好了
+  ```css
+  @base: 46.875rem;
+  div {
+    width: 200/@base;
+    height: 200/@base;
+  }
+  ```
+  移动端适配方案：
+  [https://github.com/riskers/blog/issues/17](https://github.com/riskers/blog/issues/17)
+  [https://github.com/riskers/blog/issues/18](https://github.com/riskers/blog/issues/18)
+
+> CSS 边距折叠的问题
+
+块的顶部外边距和底部外边距有时被组合(折叠)为单个外边距，其大小是组合到其中的最大外边距，这种行为称为外边距塌陷(margin collapsing)，有的地方翻译为外边距合并。
+
+发生外边距塌陷的三种情况：
+
+* 相邻的兄弟姐妹元素
+  ```html
+  <p style="margin-bottom: 30px;">这个段落的下外边距被合并...</p>
+  <p style="margin-top: 20px;">...这个段落的上外边距被合并。</p>
+  ```
+* 块级父元素与其第一个/最后一个子元素
+
+  如果块级父元素中，不存在上边框、上内边距、内联元素、块格式化上下文、 清除浮动 这五条（也可以说，当上边框宽度及上内边距距离为 0 时），那么这个块级元素和其第一个子元素的上边距就可以说”挨到了一起“。此时这个块级父元素和其第一个子元素就会发生上外边距合并现象，换句话说，此时这个父元素对外展现出来的外边距将直接变成这个父元素和其第一个子元素的 margin-top 的较大者。
+
+* 空块元素
+
+  如果存在一个空的块级元素，其 border、padding、inline content、height、min-height 都不存在。那么此时它的上下边距中间将没有任何阻隔，此时它的上下外边距将会合并
+
+  ```html
+  <p style="margin-bottom: 0px;">这个段落的和下面段落的距离将为20px</p>
+  <div style="margin-top: 20px; margin-bottom: 20px;"></div>
+  <p style="margin-top: 0px;">这个段落的和上面段落的距离将为20px</p>
+  ```
