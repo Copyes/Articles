@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "jsonp": "node ./jsonp/server.js & http-server ./jsonp"
+    "jsonp": "node ./jsonp/server.js & http-server ./jsonp",
+    "cors": "node ./cors/server.js & http-server ./cors"
   },
   "author": "lip.fan",
   "license": "ISC",
