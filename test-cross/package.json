@@ -1,0 +1,14 @@
+{
+  "name": "test-cross",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "jsonp": "node ./jsonp/server.js & http-server ./jsonp"
+  },
+  "author": "lip.fan",
+  "license": "ISC",
+  "dependencies": {
+    "http-server": "^0.11.1"
+  }
+}
