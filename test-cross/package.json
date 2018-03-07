@@ -6,7 +6,9 @@
   "scripts": {
     "jsonp": "node ./jsonp/server.js & http-server ./jsonp",
     "cors": "node ./cors/server.js & http-server ./cors",
-    "proxy": "node ./serverProxy/server.js"
+    "proxy": "node ./serverProxy/server.js",
+    "postMessage":
+      "http-server ./postMessage/client/ -p 8080 & http-server ./postMessage/server/ -p 8081"
   },
   "author": "lip.fan",
   "license": "ISC",
