@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "jsonp": "node ./jsonp/server.js & http-server ./jsonp",
-    "cors": "node ./cors/server.js & http-server ./cors"
+    "cors": "node ./cors/server.js & http-server ./cors",
+    "proxy": "node ./serverProxy/server.js"
   },
   "author": "lip.fan",
   "license": "ISC",
