@@ -87,12 +87,12 @@ let Base = function() {
   }
 }
 
-let Sub = function(){
+let Sub = function() {
   let base = new Base()
-  for(let i in base){
+  for (let i in base) {
     Sub.prototype[i] = base[i]
   }
-  Sub.prototype[name] = 'Sub
+  Sub.prototype[name] = 'Sub'
 }
 ```
 
@@ -100,12 +100,25 @@ let Sub = function(){
 
 > 原型链的简单描述
 
+* 判断某个对象是不是另一个对象的原型
+
+```js
+// ES3
+Object.prototype.isPrototypeOf(o) // 返回true值可以确定Object.prototype就是o对象的原型
+// ES5
+Object.getPrototypeOf(o) === Object.prototype
+// ES6
+o.__proto__ === Object.prototype
+// 设置一个原型
+Object.setPrototypeOf(Child.prototype, Father.prototype) // 将父类的原型设置为子类的原型
+```
+
 原型链是 JavaScript 实现继承最重要的一种方式。每一个对象都有自己的原型对象，根原型对象没有原型，所以其 **proto** 属性值为 null 。在调用时，如果访问的对象属性没有找到，JavaScript 会顺着原型链继续往下找，直到触碰到根原型为止。
 
 > ES5 和 ES6 中的继承的区别
 
-![ES5](https://lcx960324.gitbooks.io/front-end-cheat-sheet/content/assets/es5-inherit.png)
-![ES6](https://lcx960324.gitbooks.io/front-end-cheat-sheet/content/assets/es6-inherit.png)
+![ES5](https://user-images.githubusercontent.com/10307282/37136881-681c1d28-22de-11e8-946e-03983e9e4426.png)
+![ES6](https://user-images.githubusercontent.com/10307282/37136911-818dac0e-22de-11e8-9990-483273493e92.png)
 
 > JavaScript 垃圾回收机制
 
@@ -118,3 +131,7 @@ let Sub = function(){
 **引用计数**
 
 在低版本 IE 中经常会出现内存泄露，很多时候就是因为其采用引用计数方式进行垃圾回收。引用计数的策略是跟踪记录每个值被使用的次数，当声明了一个变量并将一个引用类型赋值给该变量的时候这个值的引用次数就加 1，如果该变量的值变成了另外一个，则这个值得引用次数减 1，当这个值的引用次数变为 0 的时候，说明没有变量在使用，这个值没法被访问了，因此可以将其占用的空间回收，这样垃圾回收器会在运行的时候清理掉引用次数为 0 的值占用的空间。
+
+> JavaScript 内存泄漏
+
+* 全局变量引起的内存泄漏
