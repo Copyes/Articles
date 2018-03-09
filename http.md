@@ -32,6 +32,29 @@
 
 4》网络接口层：负责通过网络发送和接收 IP 数据报
 
+##### DNS 查询过程
+
+* 查找浏览器缓存
+* 查找系统缓存
+* 查找路由器缓存
+* 查找 ISP DNS 缓存
+* 递归从根域开始搜索
+
+**耗时**
+
+```js
+let pt = window.performance.timeing
+let dns = pt.domainLookupEnd - pt.domainLookuoStart
+```
+
+**优化建议**
+
+* 控制域名数量，推荐是两个。
+* 使用缓存 Last-Modified，If-Modified-Since，ETag，If-None-Match，Expires，Cache-Control。
+* 使用 CDN，提高缓存命中率。
+* 服务根据需要设置合理的 TTL。
+* DNS 的预解析。
+
 ##### 缓存协商
 
 **Last-Modified 与 If-Modified-Since**

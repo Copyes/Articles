@@ -135,3 +135,44 @@ Object.setPrototypeOf(Child.prototype, Father.prototype) // 将父类的原型�
 > JavaScript 内存泄漏
 
 * 全局变量引起的内存泄漏
+
+```js
+function leaks() {
+  leak = 'xxxxxx' //leak 成为一个全局变量，不会被回收
+}
+```
+
+* 闭包引起的内存泄漏
+
+```js
+var leaks = (function() {
+  var leak = 'xxxxxx' // 被闭包所引用，不会被回收
+  return function() {
+    console.log(leak)
+  }
+})()
+```
+
+* dom 清空或删除时，事件未清除导致的内存泄漏
+
+```html
+<div id="container">  
+</div>
+```
+
+```js
+$('#container')
+  .bind('click', function() {
+    console.log('click')
+  })
+  .remove() // 未把事件移除
+```
+
+* 子元素存在引用引起的内存泄漏
+
+> AMD,CMD,CommonJs, ES6 module 各种模块规范
+
+* AMD：requirejs 在推广过程中对模块定义的规范化产出，提前执行，推崇依赖前置
+* CMD：seajs 在推广过程中对模块定义的规范化产出，延迟执行，推崇依赖就近
+* CommonJs：模块输出的是一个值的 copy，运行时加载，加载的是一个对象（module.exports 属性），该对象只有在脚本运行完才会生成
+* ES6 Module：模块输出的是一个值的引用，编译时输出接口，ES6 模块不是对象，它对外接口只是一种静态定义，在代码静态解析阶段就会生成。

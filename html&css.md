@@ -196,6 +196,20 @@ body {
 
 > BFC 的相关理解
 
+块级格式化上下文，容器里面的子元素不会在布局上影响到外面的元素，反之也是如此(按照这个理念来想，只要脱离文档流，肯定就能产生 BFC)。
+
+触发 BFC 的条件
+
+* float 值不为 node
+* overflow 值不为 visible
+* position 值不为 relative 和 static
+* display 值为 table-cell,table-caption, inline-block 中的任何一个
+
+**相关 IFC**
+内联格式化上下文，IFC 的 line box（线框）高度由其包含行内元素中最高的实际高度计算而来（不受到竖直方向的 padding/margin 影响)。
+
+水平居中：当一个块要在环境中水平居中时，设置其为 inline-block 则会在外层产生 IFC，通过 text-align 则可以使其水平居中。垂直居中：创建一个 IFC，用其中一个元素撑开父元素的高度，然后设置其 vertical-align: middle，其他行内元素则可以在此父元素下垂直居中
+
 > rem , em 和 px 的区别
 
 在 CSS 中，em 和 rem 都属于灵活的单位，都会由浏览器根据实际情况转换成 px 值。
@@ -255,8 +269,8 @@ px 根据不同人理解是不同的。比如说设计师理解的 px 是设备�
   ```css
   @base: 46.875rem;
   div {
-    width: 200/@base;
-    height: 200/@base;
+    width: 200 / @base;
+    height: 200 / @base;
   }
   ```
   移动端适配方案：
