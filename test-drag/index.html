@@ -6,10 +6,132 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>测试拖拽</title>
+  <style>
+    .test {
+      width: 100px;
+      height: 100px;
+      background: red;
+    }
+  </style>
 </head>
 
 <body>
-
+  <div class="test"></div>
 </body>
+<script>
+  ;
+  (function () {
+    function getTransform() {
+      let transform = ''
+      let divStyle = document.createElement('div').style
+
+      let transfomArr = ['transform', 'webkitTransform', 'msTransform', 'oTransform', 'mozTransform']
+
+      let i = 0
+      let len = transfomArr.length
+
+      for (; i < len; ++i) {
+        if (transfomArr[i] in divStyle) {
+          return transform = transfomArr[i]
+        }
+      }
+      return transform
+    }
+    let transform = getTransform()
+
+    function Drag(selector) {
+      this.startX = 0
+      this.startY = 0
+      this.sourceX = 0
+      this.sourceY = 0
+      this.elem = typeof selector === 'Object' ? selector : document.querySelector(selector)
+      this.init()
+    }
+    Drag.prototype.init = function () {
+      this.setDrag()
+    }
+    // 获取当前节点的属性
+    Drag.prototype.getStyle = function (property) {
+      return document.defaultView.getComputedStyle ? document.defaultView.getComputedStyle(this.elem, false)[
+        property] : this.elem.currentStyle[property]
+    }
+    // 获取当前元素坐标
+    Drag.prototype.getPosition = function () {
+      let pos = {
+        x: 0,
+        y: 0
+      }
+      if (transform) {
+        let transformVal = this.getStyle(transform)
+        if (transformVal === 'none') {
+          this.elem.style[transform] = 'tanslate(0,0)'
+        } else {
+          let temp = transformVal.match(/-?\d+/g)
+          pos = {
+            x: parseInt(temp[4].trim()),
+            y: parseInt(temp[5].trim())
+          }
+        }
+      } else {
+        if (this.getStyle('position') === 'static') {
+          this.elem.style.position = 'relative'
+        } else {
+          pos = {
+            x: parseInt(this.getStyle('left') ? this.getStyle('right') : 0),
+            y: parseInt(this.getStyle('top') ? this.getStyle('bottom') : 0)
+          }
+        }
+      }
+      return pos
+    }
+    // 给当前元素设置坐标
+    Drag.prototype.setPosition = function (pos) {
+      if (transform) {
+        this.elem.style[transform] = `translate(${pos.x}px,${pos.y}px)`
+      } else {
+        this.elem.style.left = `${pos.x}px`
+        this.elem.style.top = `${pos.y}px`
+      }
+    }
+    // 给当前元素添加事件
+    Drag.prototype.setDrag = function () {
+      let self = this
+      this.elem.addEventListener('mousedown', start, false)
+
+      function start(e) {
+        self.startX = e.pageX
+        self.startY = e.pageY
+
+        let pos = self.getPosition()
+        self.sourceX = pos.x
+        self.sourceY = pos.y
+
+        document.addEventListener('mousemove', move, false)
+        document.addEventListener('mouseup', end, false)
+      }
+
+      function move(e) {
+        let currentX = e.pageX
+        let currentY = e.pageY
+
+        let distanceX = currentX - self.startX
+        let distanceY = currentY - self.startY
+        // 设置移动的距离
+        self.setPosition({
+          x: (self.sourceX + distanceX).toFixed(),
+          y: (self.sourceY + distanceY).toFixed()
+        })
+      }
+
+      function end(e) {
+        document.removeEventListener('mousemove', move)
+        document.removeEventListener('mouseup', end)
+      }
+    }
+    window.Drag = Drag
+  })()
+
+  new Drag('.test')
+</script>
 
 </html>
