@@ -1,5 +1,3 @@
-import { clearTimeout, setTimeout } from 'timers'
-
 function parse(obj, exp) {
   exp
     .replace('[', '.')

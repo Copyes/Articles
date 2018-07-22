@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="container">
+    <button id="all">all</button>
+  </div>
+</body>
+<script>
+  function foo(n) {
+    var oCon = document.getElementById('container')
+    for (let i = 1; i <= n; ++i) {
+      var oButton = document.createElement('button')
+      oButton.innerText = i
+      oCon.appendChild(oButton)
+    }
+    oCon.addEventListener('click', function (e) {
+      if (e.target.nodeName === 'BUTTON' && e.target.innerText !== 'all') {
+        alert(e.target.innerText)
+      }
+    })
+    return function () {
+      let oAll = document.getElementById('all')
+      oAll.addEventListener('click', function () {
+        let i = 1
+        while (i <= n) {
+          (function (j) {
+            setTimeout(function () {
+              console.log(j)
+            }, j * 1000)
+          })(i)
+          i++
+        }
+      })
+    }
+  }
+  let bar = foo(5)
+  bar()
+</script>
+
+</html>
